@@ -1,2 +1,13 @@
-/target/
+# Сборка Maven
+target/
+# Локальный репозиторий
+.m2/
+# IDE
+.idea/
+# Файлы
+*.xlsx
+# Секреты и конфиги с данными
 invest.properties
+# Прочее
+build/
+out/
