@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MarketDataService {
+
     private final ServiceStubFactory factory;
 
 
@@ -19,10 +20,7 @@ public class MarketDataService {
     }
 
 
-    public Map<String, LastPrice> getPrices(
-            List<Bond> bonds
-    ) {
-
+    public Map<String, LastPrice> getPrices(List<Bond> bonds) {
 
         var service =
                 factory.newSyncService(
@@ -54,8 +52,7 @@ public class MarketDataService {
                 new HashMap<>();
 
 
-        for (LastPrice price :
-                response.getLastPricesList()) {
+        for (LastPrice price : response.getLastPricesList()) {
 
             result.put(
                     price.getFigi(),

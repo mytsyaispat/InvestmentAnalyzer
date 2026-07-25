@@ -17,18 +17,14 @@ public final class TBankUtils {
      * Quotation -> double
      */
     public static double toDouble(Quotation quotation) {
-
-        return quotation.getUnits()
-                + quotation.getNano() / 1_000_000_000.0;
+        return quotation.getUnits() + quotation.getNano() / 1_000_000_000.0;
     }
 
     /**
      * MoneyValue -> double
      */
     public static double toDouble(MoneyValue money) {
-
-        return money.getUnits()
-                + money.getNano() / 1_000_000_000.0;
+        return money.getUnits() + money.getNano() / 1_000_000_000.0;
     }
 
     /**
@@ -45,23 +41,15 @@ public final class TBankUtils {
      * Цена облигации в рублях
      * (price приходит в процентах от номинала)
      */
-    public static double cleanPrice(
-            Quotation quotation,
-            MoneyValue nominal) {
-
+    public static double cleanPrice(Quotation quotation, MoneyValue nominal) {
         return toDouble(nominal) * toDouble(quotation) / 100.0;
     }
 
     /**
      * Полная цена покупки
      */
-    public static double dirtyPrice(
-            Quotation quotation,
-            MoneyValue nominal,
-            MoneyValue aci) {
-
-        return cleanPrice(quotation, nominal)
-                + toDouble(aci);
+    public static double dirtyPrice(Quotation quotation, MoneyValue nominal, MoneyValue aci) {
+        return cleanPrice(quotation, nominal) + toDouble(aci);
     }
 
     /**

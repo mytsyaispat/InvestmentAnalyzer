@@ -4,89 +4,39 @@ import org.example.model.BondCashFlow;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.time.temporal.ChronoUnit;
 
 public class YieldCalculator {
-    public static double calculate(
-            double dirtyPrice,
-            List<BondCashFlow> flows,
-            LocalDate settlementDate,
-            int couponsPerYear
-    ) {
-
-
+    public static double calculateYtm(double dirtyPrice, List<BondCashFlow> flows, LocalDate settlementDate) {
         double low = 0;
-        double high = 1;
-
+        double high = 5;
 
         for (int i = 0; i < 200; i++) {
+            double rate = (low + high) / 2;
 
-
-            double rate =
-                    (low + high) / 2;
-
-
-            double pv =
-                    calculatePv(
-                            flows,
-                            rate,
-                            settlementDate,
-                            couponsPerYear
-                    );
-
+            double pv = calculatePv(flows, rate, settlementDate);
 
             if (pv > dirtyPrice) {
-
                 low = rate;
-
             } else {
-
                 high = rate;
             }
         }
-
 
         return (low + high) / 2;
     }
 
 
-
-    private static double calculatePv(
-            List<BondCashFlow> flows,
-            double annualRate,
-            LocalDate settlementDate,
-            int couponsPerYear
-    ) {
-
-
+    private static double calculatePv(List<BondCashFlow> flows, double annualRate, LocalDate settlementDate) {
         double result = 0;
-
 
         for (BondCashFlow flow : flows) {
 
+            long days = flow.getDate().toEpochDay() - settlementDate.toEpochDay();
 
-            long days =
-                    ChronoUnit.DAYS.between(
-                            settlementDate,
-                            flow.getDate()
-                    );
+            double years = days / 365.0;
 
-
-            double periods =
-                    days / 365.0
-                            *
-                            couponsPerYear;
-
-
-            result +=
-                    flow.getAmount()
-                            /
-                            Math.pow(
-                                    1 + annualRate / couponsPerYear,
-                                    periods
-                            );
+            result += flow.getAmount() / Math.pow(1 + annualRate, years);
         }
-
 
         return result;
     }
