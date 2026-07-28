@@ -1,5 +1,6 @@
 package org.example.api;
 
+import org.example.model.BondInfo;
 import ru.tinkoff.piapi.contract.v1.Bond;
 import ru.tinkoff.piapi.contract.v1.GetLastPricesRequest;
 import ru.tinkoff.piapi.contract.v1.LastPrice;
@@ -19,47 +20,29 @@ public class MarketDataService {
         this.factory = factory;
     }
 
-
-    public Map<String, LastPrice> getPrices(List<Bond> bonds) {
-
-        var service =
-                factory.newSyncService(
-                        MarketDataServiceGrpc::newBlockingStub
-                );
-
-
-        var request =
-                GetLastPricesRequest.newBuilder();
+    public MarketDataService() {
+        this.factory = TBankClient.getServiceFactory();
+        if (factory == null) {
+            throw new IllegalArgumentException("StudFactory is not implemented");
+        }
+    }
 
 
-        for (Bond bond : bonds) {
+    public Map<String, LastPrice> getPrices(List<BondInfo> bonds) {
+        var service = factory.newSyncService(MarketDataServiceGrpc::newBlockingStub);
+        var request = GetLastPricesRequest.newBuilder();
 
-            request.addInstrumentId(
-                    bond.getFigi()
-            );
+        for (BondInfo bond : bonds) {
+            request.addInstrumentId(bond.getFigi());
         }
 
+        var response = service.callSyncMethod(stub -> stub.getLastPrices(request.build()));
 
-        var response =
-                service.callSyncMethod(
-                        stub -> stub.getLastPrices(
-                                request.build()
-                        )
-                );
-
-
-        Map<String, LastPrice> result =
-                new HashMap<>();
-
+        Map<String, LastPrice> result = new HashMap<>();
 
         for (LastPrice price : response.getLastPricesList()) {
-
-            result.put(
-                    price.getFigi(),
-                    price
-            );
+            result.put(price.getFigi(), price);
         }
-
 
         return result;
     }

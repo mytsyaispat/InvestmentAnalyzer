@@ -8,4 +8,8 @@ public class PriceCalculator {
         double percent = price.getPrice().getUnits() + price.getPrice().getNano() / 1_000_000_000.0;
         return percent / 100 * nominal;
     }
+
+    public static double calculateDirtyPrice(double cleanPrice, double accruedCoupon) {
+        return cleanPrice + accruedCoupon;
+    }
 }

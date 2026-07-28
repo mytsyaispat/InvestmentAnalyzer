@@ -2,34 +2,16 @@ package org.example.model;
 
 import java.time.LocalDate;
 
-public class BondCashFlow {
-    private final LocalDate date;
-    private final double amount;
-    private final boolean principal;
+public record BondCashFlow(LocalDate date, double amount, CashFlowType type) {
 
+    public BondCashFlow {
+        if (date == null) {
+            throw new IllegalArgumentException("Date cannot be null");
+        }
 
-    public BondCashFlow(
-            LocalDate date,
-            double amount,
-            boolean principal
-    ) {
-        this.date = date;
-        this.amount = amount;
-        this.principal = principal;
+        if (amount < 0) {
+            throw new IllegalArgumentException("Amount cannot be negative");
+        }
     }
 
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-
-    public double getAmount() {
-        return amount;
-    }
-
-
-    public boolean isPrincipal() {
-        return principal;
-    }
 }

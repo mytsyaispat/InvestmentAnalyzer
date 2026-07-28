@@ -138,11 +138,11 @@ public class BondInfo {
         this.riskLevel = riskLevel;
     }
 
-    public double getYtm() {
-        return ytm;
-    }
-
     public void setYtm(double ytm) {
         this.ytm = ytm;
+    }
+
+    public double getYtm() {
+        return ytm;
     }
 }
